@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import '../model/task_item_model.dart';
 
 class TaskItem extends StatelessWidget {
-  final String title;
+  final TaskItemModel item;
   final VoidCallback onDelete;
+  final VoidCallback onToggle;
 
   const TaskItem({
     super.key,
-    required this.title,
+    required this.item,
     required this.onDelete,
+    required this.onToggle,
   });
 
   @override
@@ -20,21 +23,46 @@ class TaskItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 16),
+        child: Row(
+          children: [
+            Checkbox(
+              value: item.isDone,
+              onChanged: (_) => onToggle(),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: onDelete,
-          ),
-        ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      decoration: item.isDone
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      decoration: item.isDone
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: onDelete,
+            ),
+          ],
+        ),
       ),
-      )
     );
   }
 }
