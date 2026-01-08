@@ -17,13 +17,6 @@ class AddTaskDialog extends StatelessWidget {
           children: [
             TextField(
               decoration: const InputDecoration(
-                labelText: 'Título',
-              ),
-              onChanged: store.setTitle,
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              decoration: const InputDecoration(
                 labelText: 'Descrição',
               ),
               onChanged: store.setDescription,

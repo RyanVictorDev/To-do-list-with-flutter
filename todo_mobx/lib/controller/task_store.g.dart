@@ -31,21 +31,6 @@ mixin _$TaskStore on _TaskStoreBase, Store {
     });
   }
 
-  late final _$titleAtom = Atom(name: '_TaskStoreBase.title', context: context);
-
-  @override
-  String get title {
-    _$titleAtom.reportRead();
-    return super.title;
-  }
-
-  @override
-  set title(String value) {
-    _$titleAtom.reportWrite(value, super.title, () {
-      super.title = value;
-    });
-  }
-
   late final _$descriptionAtom =
       Atom(name: '_TaskStoreBase.description', context: context);
 
@@ -80,17 +65,6 @@ mixin _$TaskStore on _TaskStoreBase, Store {
 
   late final _$_TaskStoreBaseActionController =
       ActionController(name: '_TaskStoreBase', context: context);
-
-  @override
-  void setTitle(String value) {
-    final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
-        name: '_TaskStoreBase.setTitle');
-    try {
-      return super.setTitle(value);
-    } finally {
-      _$_TaskStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   void setDescription(String value) {
@@ -151,7 +125,6 @@ mixin _$TaskStore on _TaskStoreBase, Store {
   String toString() {
     return '''
 tasks: ${tasks},
-title: ${title},
 description: ${description},
 forecast: ${forecast},
 canSave: ${canSave}

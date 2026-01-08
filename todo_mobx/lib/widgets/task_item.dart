@@ -34,10 +34,9 @@ class TaskItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title,
+                    item.description,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
                       decoration: item.isDone
                           ? TextDecoration.lineThrough
                           : null,
@@ -45,12 +44,10 @@ class TaskItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      decoration: item.isDone
-                          ? TextDecoration.lineThrough
-                          : null,
+                    'Previsão: ${item.forecast.toLocal().toString().split(' ')[0]}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
                     ),
                   ),
                 ],

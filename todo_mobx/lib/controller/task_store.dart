@@ -10,9 +10,6 @@ abstract class _TaskStoreBase with Store {
   ObservableList<TaskItemModel> tasks = ObservableList<TaskItemModel>();
 
   @observable
-  String title = '';
-
-  @observable
   String description = '';
 
   @observable
@@ -20,12 +17,7 @@ abstract class _TaskStoreBase with Store {
 
   @computed
   bool get canSave =>
-      title.trim().isNotEmpty && description.trim().isNotEmpty && forecast != null;
-
-  @action
-  void setTitle(String value) {
-    title = value;
-  }
+      description.trim().isNotEmpty && forecast != null;
 
   @action
   void setDescription(String value) {
@@ -43,13 +35,11 @@ abstract class _TaskStoreBase with Store {
 
     tasks.add(
       TaskItemModel(
-        title: title.trim(),
         description: description.trim(),
         forecast: forecast!,
       ),
     );
 
-    title = '';
     description = '';
     forecast = null;
   }
