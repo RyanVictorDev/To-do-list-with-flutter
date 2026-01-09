@@ -84,6 +84,22 @@ mixin _$TaskStore on _TaskStoreBase, Store {
     });
   }
 
+  late final _$isForecastAscAtom =
+      Atom(name: '_TaskStoreBase.isForecastAsc', context: context);
+
+  @override
+  bool get isForecastAsc {
+    _$isForecastAscAtom.reportRead();
+    return super.isForecastAsc;
+  }
+
+  @override
+  set isForecastAsc(bool value) {
+    _$isForecastAscAtom.reportWrite(value, super.isForecastAsc, () {
+      super.isForecastAsc = value;
+    });
+  }
+
   late final _$activeFilterAtom =
       Atom(name: '_TaskStoreBase.activeFilter', context: context);
 
@@ -188,6 +204,7 @@ mixin _$TaskStore on _TaskStoreBase, Store {
 tasks: ${tasks},
 description: ${description},
 forecast: ${forecast},
+isForecastAsc: ${isForecastAsc},
 activeFilter: ${activeFilter},
 canSave: ${canSave},
 filteredTasks: ${filteredTasks},

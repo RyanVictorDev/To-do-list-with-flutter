@@ -19,7 +19,6 @@ class TaskPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// CONTADOR
             Observer(
               builder: (_) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,15 +31,15 @@ class TaskPage extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// FILTROS
             Observer(
               builder: (_) => Row(
                 children: [
                   FilterChip(
-                    label: const Text('Hoje'),
-                    selected: store.activeFilter == TaskFilter.byDate,
-                    onSelected: (_) =>
-                        store.setFilter(TaskFilter.byDate),
+                    label: Text(
+                      store.isForecastAsc ? 'Previsão ↑' : 'Previsão ↓',
+                    ),
+                    selected: store.activeFilter == TaskFilter.byForecast,
+                    onSelected: (_) => store.setFilter(TaskFilter.byForecast),
                   ),
                   const SizedBox(width: 8),
                   FilterChip(
@@ -62,7 +61,6 @@ class TaskPage extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// LISTA
             Expanded(
               child: Observer(
                 builder: (_) => ListView.builder(

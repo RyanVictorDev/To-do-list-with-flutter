@@ -5,7 +5,7 @@ part 'task_store.g.dart';
 
 enum TaskFilter {
   none,
-  byDate,
+  byForecast,     
   doneOnly,
 }
 
@@ -22,6 +22,9 @@ abstract class _TaskStoreBase with Store {
   DateTime? forecast;
 
   @observable
+  bool isForecastAsc = true;
+
+  @observable
   TaskFilter activeFilter = TaskFilter.none;
 
   @computed
@@ -30,21 +33,21 @@ abstract class _TaskStoreBase with Store {
 
   @computed
   List<TaskItemModel> get filteredTasks {
+    final list = tasks.toList();
+
     switch (activeFilter) {
-      case TaskFilter.byDate:
-        return tasks
-            .where((t) =>
-                t.forecast.year == DateTime.now().year &&
-                t.forecast.month == DateTime.now().month &&
-                t.forecast.day == DateTime.now().day)
-            .toList();
+      case TaskFilter.byForecast:
+        list.sort((a, b) => isForecastAsc
+            ? a.forecast.compareTo(b.forecast)
+            : b.forecast.compareTo(a.forecast));
+        return list;
 
       case TaskFilter.doneOnly:
-        return tasks.where((t) => t.isDone).toList();
+        return list.where((t) => t.isDone).toList();
 
       case TaskFilter.none:
       default:
-        return tasks.toList();
+        return list;
     }
   }
 
@@ -61,7 +64,16 @@ abstract class _TaskStoreBase with Store {
   void setForecast(DateTime date) => forecast = date;
 
   @action
-  void setFilter(TaskFilter filter) => activeFilter = filter;
+  void setFilter(TaskFilter filter) {
+    if (activeFilter == filter && filter == TaskFilter.byForecast) {
+      isForecastAsc = !isForecastAsc;
+    } else {
+      activeFilter = filter;
+      if (filter == TaskFilter.byForecast) {
+        isForecastAsc = true;
+      }
+    }
+  }
 
   @action
   void addTask() {
