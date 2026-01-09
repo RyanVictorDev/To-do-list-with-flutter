@@ -15,6 +15,27 @@ mixin _$TaskStore on _TaskStoreBase, Store {
   bool get canSave => (_$canSaveComputed ??=
           Computed<bool>(() => super.canSave, name: '_TaskStoreBase.canSave'))
       .value;
+  Computed<List<TaskItemModel>>? _$filteredTasksComputed;
+
+  @override
+  List<TaskItemModel> get filteredTasks => (_$filteredTasksComputed ??=
+          Computed<List<TaskItemModel>>(() => super.filteredTasks,
+              name: '_TaskStoreBase.filteredTasks'))
+      .value;
+  Computed<int>? _$doneCountComputed;
+
+  @override
+  int get doneCount =>
+      (_$doneCountComputed ??= Computed<int>(() => super.doneCount,
+              name: '_TaskStoreBase.doneCount'))
+          .value;
+  Computed<int>? _$remainingCountComputed;
+
+  @override
+  int get remainingCount =>
+      (_$remainingCountComputed ??= Computed<int>(() => super.remainingCount,
+              name: '_TaskStoreBase.remainingCount'))
+          .value;
 
   late final _$tasksAtom = Atom(name: '_TaskStoreBase.tasks', context: context);
 
@@ -63,6 +84,22 @@ mixin _$TaskStore on _TaskStoreBase, Store {
     });
   }
 
+  late final _$activeFilterAtom =
+      Atom(name: '_TaskStoreBase.activeFilter', context: context);
+
+  @override
+  TaskFilter get activeFilter {
+    _$activeFilterAtom.reportRead();
+    return super.activeFilter;
+  }
+
+  @override
+  set activeFilter(TaskFilter value) {
+    _$activeFilterAtom.reportWrite(value, super.activeFilter, () {
+      super.activeFilter = value;
+    });
+  }
+
   late final _$_TaskStoreBaseActionController =
       ActionController(name: '_TaskStoreBase', context: context);
 
@@ -89,6 +126,17 @@ mixin _$TaskStore on _TaskStoreBase, Store {
   }
 
   @override
+  void setFilter(TaskFilter filter) {
+    final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
+        name: '_TaskStoreBase.setFilter');
+    try {
+      return super.setFilter(filter);
+    } finally {
+      _$_TaskStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addTask() {
     final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
         name: '_TaskStoreBase.addTask');
@@ -100,22 +148,35 @@ mixin _$TaskStore on _TaskStoreBase, Store {
   }
 
   @override
-  void toggleDone(int index) {
+  void toggleDone(TaskItemModel task) {
     final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
         name: '_TaskStoreBase.toggleDone');
     try {
-      return super.toggleDone(index);
+      return super.toggleDone(task);
     } finally {
       _$_TaskStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void removeTask(int index) {
+  void removeTask(TaskItemModel task) {
     final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
         name: '_TaskStoreBase.removeTask');
     try {
-      return super.removeTask(index);
+      return super.removeTask(task);
+    } finally {
+      _$_TaskStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void editTask(TaskItemModel task,
+      {required String newDescription, required DateTime newForecast}) {
+    final _$actionInfo = _$_TaskStoreBaseActionController.startAction(
+        name: '_TaskStoreBase.editTask');
+    try {
+      return super.editTask(task,
+          newDescription: newDescription, newForecast: newForecast);
     } finally {
       _$_TaskStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -127,7 +188,11 @@ mixin _$TaskStore on _TaskStoreBase, Store {
 tasks: ${tasks},
 description: ${description},
 forecast: ${forecast},
-canSave: ${canSave}
+activeFilter: ${activeFilter},
+canSave: ${canSave},
+filteredTasks: ${filteredTasks},
+doneCount: ${doneCount},
+remainingCount: ${remainingCount}
     ''';
   }
 }

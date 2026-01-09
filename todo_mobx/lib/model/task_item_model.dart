@@ -1,6 +1,6 @@
 class TaskItemModel {
-  final String description;
-  final DateTime forecast;
+  String description;
+  DateTime forecast;
   bool isDone;
 
   TaskItemModel({
